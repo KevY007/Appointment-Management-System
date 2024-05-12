@@ -1,0 +1,78 @@
+﻿@model IEnumerable<AMS.Appointment>
+
+@{
+    ViewBag.Title = "ViewAppointments";
+    Layout = "~/Views/DefaultLayout.cshtml";
+    User user = (User)Session["User"];
+    List<Department> Departments = ViewBag.Departments;
+    List<Doctor> Doctors = ViewBag.Doctors;
+    List<Patient> Patients = ViewBag.Patients;
+    List<Appointment> Appointments = ViewBag.Appointments;
+    List<SelectListItem> TimeSlots = ViewBag.TimeSlots;
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Appointments /</span> View Appointments</h4>
+
+        <!-- Basic Bootstrap Table -->
+        <div class="card">
+
+            <div class="table-responsive text-nowrap" style="min-height: 200px;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Department</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Time Slot</th>
+                            <th>Date</th>
+                            <th>Completed</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @foreach (Appointment item in Appointments)
+                        {
+                            <tr>
+                                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@Html.DisplayFor(modelItem => item.Id)</strong></td>
+                                <td>@item.Doctor.Department.Name</td>
+                                <td>@item.Patient.Name</td>
+                                <td>@item.Doctor.Name</td>
+                                <td>@TimeSlots.Find(x => x.Value == item.TimeSlot.ToString()).Text</td>
+                                <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                                @{
+                                    if (item.Completed)
+                                    {
+                                        <td>Yes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>No</td>
+                                    }
+                                }
+                                <td>@item.Description<td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            @{
+                                                <a class="dropdown-item" href="@Url.Action("CompleteAppointment", new { id = item.Id })"><i class="bx bx-check-square me-1"></i> Mark Completed</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

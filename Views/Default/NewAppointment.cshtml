@@ -1,0 +1,66 @@
+﻿@model AMS.Appointment
+
+@{
+    ViewBag.Title = "NewAppointment";
+    Layout = "~/Views/DefaultLayout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Appointments / </span> Schedule An Appointment</h4>
+
+    <!-- Basic Layout -->
+    <div class="row">
+        <div class="col-xl">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Schedule a new appointment</h5>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm())
+                    {
+                        HtmlHelper.ClientValidationEnabled = true;
+                        HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            @{
+                                var b = new List<SelectListItem>();
+                                foreach (Department c in ViewBag.Departments)
+                                {
+                                    b.Add(new SelectListItem { Text = $"{c.Name}", Value = c.Id.ToString() });
+                                }
+                            }
+                            @Html.Label("Department", labelText: "Department", htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownList("Department", b, new { @class = "select2 form-select" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.TimeSlot, labelText: "Time Slot", htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.TimeSlot, (List<SelectListItem>)ViewBag.TimeSlots, new { @class = "select2 form-select" })
+                            @Html.ValidationMessageFor(model => model.TimeSlot, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Date, labelText: "Date", htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @placeholder = DateTime.Today.ToString("dd/MM/yyyy"), @Value = DateTime.Today.ToString("dd/MM/yyyy") } })
+                            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Description, labelText: "Description", htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "n/a", @Value = "n/a" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                        <br />
+
+                        <p class="text-center text-danger">@ViewBag.Error</p>
+                        @Html.ValidationSummary(true, "", new { @class = "text-center text-danger" })
+
+                        <input type="submit" value="Schedule" class="btn btn-primary" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
