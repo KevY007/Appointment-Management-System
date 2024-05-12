@@ -77,6 +77,16 @@ namespace AMS.Controllers
 
             con.Close();
 
+            if(lDepts.Count == 0)
+            {
+                return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "There are no departments created. Contact an administrator.", backTo = "Index" });
+            }
+            
+            if (TimeSlots.Count == 0)
+            {
+                return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "There are no time slots set. Contact an administrator.", backTo = "Index" });
+            }
+
             ViewBag.TimeSlots = TimeSlots;
             ViewBag.Departments = lDepts;
             ViewBag.Error = error;
