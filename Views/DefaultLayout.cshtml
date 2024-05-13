@@ -205,8 +205,8 @@
                             </li>
 
                             <!-- Appointments -->
-                            <li class="menu-item @((ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") && 
-                                !ViewContext.RouteData.Values["Action"].ToString().Contains("NewAppointment")) ? "active" : "")">
+                            <li class="menu-item @((ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") &&
+!ViewContext.RouteData.Values["Action"].ToString().Contains("NewAppointment")) ? "active" : "")">
                                 <a href="@Url.Action("ViewAppointments")" class="menu-link">
                                     <i class="menu-icon tf-icons bx bx-calendar-week"></i>
                                     <div data-i18n="Appointments">Appointments</div>
@@ -254,10 +254,25 @@
                             </li>-->
 
                             <!-- User -->
+
+                            @{
+                                string avatar = Url.Content("~/Theme/assets/img/avatars/default.png");
+                                if(user.Type == UserType.Patient)
+                                {
+                                    if (((Patient)user).Gender == Gender.Male)
+                                    {
+                                        avatar = Url.Content("~/Theme/assets/img/avatars/male.png");
+                                    }
+                                    else
+                                    {
+                                        avatar = Url.Content("~/Theme/assets/img/avatars/female.png");
+                                    }
+                                }
+                            }
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="~/Theme/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                                        <img src="@avatar" alt class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -266,27 +281,7 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        @{
-                                                            if (user.Type == UserType.Admin)
-                                                            {
-                                                                <img src="~/Theme/assets/img/avatars/default.png" alt class="w-px-40 h-auto rounded-circle" />
-                                                            }
-                                                            else if (user.Type == UserType.Doctor)
-                                                            {
-                                                                <img src="~/Theme/assets/img/avatars/default.png" alt class="w-px-40 h-auto rounded-circle" />
-                                                            }
-                                                            else
-                                                            {
-                                                                if (((Patient)user).Gender == Gender.Male)
-                                                                {
-                                                                    <img src="~/Theme/assets/img/avatars/male.png" alt class="w-px-40 h-auto rounded-circle" />
-                                                                }
-                                                                else
-                                                                {
-                                                                    <img src="~/Theme/assets/img/avatars/female.png" alt class="w-px-40 h-auto rounded-circle" />
-                                                                }
-                                                            }
-                                                        }
+                                                        <img src="@avatar" alt class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
@@ -312,6 +307,43 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
+                                    @{
+                                        if (user.Type == UserType.Admin)
+                                        {
+                                        }
+                                        else if (user.Type == UserType.Doctor)
+                                        {
+                                            Doctor doc = (Doctor)user;
+                                            <div class="d-flex">
+                                                <div class="flex-grow-1">
+                                                    <div class="text-center"><span class="fw-semibold d-block">Salary: $@doc.Salary</span></div>
+                                                    @{
+                                                        if (doc.Available)
+                                                        {
+                                                            <li>
+                                                                <a class="dropdown-item" href="@Url.Action("ToggleAvailability")">
+                                                                    <i class="bx bx-walk me-2"></i>
+                                                                    <span class="align-middle">Take a break</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li>
+                                                                <a class="dropdown-item" href="@Url.Action("ToggleAvailability")">
+                                                                    <i class="bx bx-run me-2"></i>
+                                                                    <span class="align-middle">Start working</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                        }
+                                    }
                                     <li>
                                         <a class="dropdown-item" href="@Url.Action("Logout")">
                                             <i class="bx bx-power-off me-2"></i>

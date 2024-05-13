@@ -14,7 +14,7 @@
                 <div class="d-flex align-items-end row">
                     <div class="col-sm-7">
                         <div class="card-body">
-                            <h5 class="card-title text-primary">Welcome, @user.Name! 🎉 (@user.Type.ToString())</h5>
+                            <h5 class="card-title text-primary">Welcome, @user.Name! 🎉</h5>
                             @{
                                 if (user.Type == UserType.Admin)
                                 {
@@ -25,11 +25,26 @@
                                 }
                                 else if (user.Type == UserType.Doctor)
                                 {
-                                    <a href="#" class="btn btn-sm btn-outline-primary">@(((Doctor)user).Department.Name) Department</a>
+                                    <div class="mb-4">
+                                        <a href="#" class="btn btn-sm btn-outline-primary">@(((Doctor)user).Department.Name) Department</a>
+                                        @if (!((Doctor)user).Available)
+                                        {
+                                            <a href="#" class="btn btn-sm btn-warning">On Break</a>
+                                        }
+                                    </div>
 
-                                    <p class="mb-4">
-                                        You have <span class="fw-bold">@ViewBag.NumAppointmentsActive</span> pending appointments.
-                                    </p>
+                                    if (((Doctor)user).Available)
+                                    {
+                                        <p class="mb-4">
+                                            You have <span class="fw-bold">@ViewBag.NumAppointmentsActive</span> pending appointments.
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-4">
+                                            You are currently on a <span class="fw-bold">break</span>. No <span class="fw-bold">new appointments</span> will be scheduled.
+                                        </p>
+                                    }
                                 }
                                 else
                                 {

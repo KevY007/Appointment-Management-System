@@ -97,6 +97,35 @@ namespace AMS.Controllers
 
             return RedirectToAction("ViewPatients");
         }
+
+        [Authorize]
+        public ActionResult ToggleAvailability()
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            User user = (User)Session["User"];
+            if (user.Type != UserType.Doctor)
+            {
+                return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "You are not a doctor.", backTo = "Index" });
+            }
+
+            Doctor doc = (Doctor)user;
+            SqlConnection con = new SqlConnection(Settings.ConnectionString);
+            con.Open();
+
+            string query = $"EXEC ToggleDoctorAvailability @doctorId = {doc.Id}";
+            
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            doc.Available = !doc.Available;
+            Session["User"] = doc;
+            return Redirect(this.Request.UrlReferrer.AbsolutePath);
+        }
         #endregion
     }
 }

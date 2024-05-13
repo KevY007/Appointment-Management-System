@@ -15,7 +15,7 @@ namespace AMS
 
         public Doctor Doctor { get; set; }
 
-        [Required]
+        [Required, DisplayName("Time Slot")]
         public int TimeSlot { get; set; }
 
         [Required, DataType(DataType.DateTime)]

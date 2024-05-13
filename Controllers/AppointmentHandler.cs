@@ -49,6 +49,7 @@ namespace AMS.Controllers
                     {
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
+                        AppointmentCost = Convert.ToInt32(dt.Rows[i][2].ToString()),
                     });
                 }
             }
@@ -177,6 +178,7 @@ namespace AMS.Controllers
                     {
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
+                        AppointmentCost = Convert.ToInt32(dt.Rows[i][2].ToString()),
                     });
                 }
             }

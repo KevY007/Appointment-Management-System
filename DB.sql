@@ -1,6 +1,7 @@
 ﻿CREATE TABLE Departments (
 	ID int NOT NULL PRIMARY KEY IDENTITY(1,1), 
-	Name varchar(100) NOT NULL
+	Name varchar(100) NOT NULL,
+	AppointmentCost int NOT NULL DEFAULT 1000,
 );
 
 CREATE TABLE Patients (
@@ -40,7 +41,8 @@ CREATE TABLE Appointments (
 	TimeSlot int NOT NULL FOREIGN KEY REFERENCES TimeSlots(ID) ON DELETE CASCADE,
 	Date DATETIME NOT NULL,
 	Completed BIT NOT NULL DEFAULT 0,
-	Description varchar(MAX) NOT NULL DEFAULT 'N/A'
+	Description varchar(MAX) NOT NULL DEFAULT 'N/A',
+	CONSTRAINT StopClash UNIQUE (TimeSlot, Date)
 );
 
 
@@ -134,7 +136,7 @@ GO
 
 CREATE PROCEDURE GetNumDoctorPatients (@doctorId int) AS
 BEGIN
-	SELECT COUNT(DISTINCT PatientID) FROM Appointments WHERE DoctorID = @doctorId
+	SELECT COUNT(DISTINCT PatientID) FROM Appointments WHERE DoctorID = @doctorId AND Completed = 0
 END
 GO
 
@@ -153,6 +155,12 @@ GO
 CREATE PROCEDURE GetNumPatientPendingAppointments (@patientId int) AS
 BEGIN
 	SELECT COUNT(*) FROM Appointments WHERE Completed = 0 AND PatientID = @patientId
+END
+GO
+
+CREATE PROCEDURE GetDepartmentAppointments (@depId int) AS
+BEGIN
+	SELECT * FROM Appointments a JOIN Doctors doc ON a.DoctorID = doc.ID JOIN Departments dep ON doc.DepartmentID = dep.ID WHERE dep.ID = @depId ORDER BY Completed ASC, Date DESC, TimeSlot ASC
 END
 GO
 
@@ -207,7 +215,11 @@ GO
 
 CREATE PROCEDURE MarkAppointmentComplete (@id int) AS 
 BEGIN 
-	UPDATE Appointments SET Completed = 1 WHERE ID = @id 
+	IF (SELECT Completed FROM Appointments WHERE ID = @id) = 0
+	BEGIN
+		UPDATE Appointments SET Completed = 1 WHERE ID = @id
+		UPDATE Doctors SET Salary = Salary + (SELECT dep.AppointmentCost FROM Appointments a JOIN Doctors doc ON doc.ID = a.DoctorID JOIN Departments dep ON dep.ID = doc.DepartmentID WHERE a.ID = @id) WHERE ID = (SELECT DoctorID FROM Appointments WHERE ID = @id)
+	END
 END
 GO
 
@@ -223,3 +235,13 @@ BEGIN
 	VALUES (@patientId, (SELECT TOP 1 ID FROM Doctors WHERE DepartmentID = @deptId AND Available = 1 ORDER BY NEWID()), @timeSlot, @date, @desc)
 END
 GO
+
+CREATE PROCEDURE ToggleDoctorAvailability (@doctorId int) AS
+BEGIN
+    IF (SELECT Available FROM Doctors WHERE ID = @doctorId) = 1
+        UPDATE Doctors SET Available = 0 WHERE ID = @doctorId;
+    ELSE
+        UPDATE Doctors SET Available = 1 WHERE ID = @doctorId;
+END
+GO
+

@@ -63,7 +63,14 @@
                                         </button>
                                         <div class="dropdown-menu">
                                             @{
-                                                <a class="dropdown-item" href="@Url.Action("CompleteAppointment", new { id = item.Id })"><i class="bx bx-check-square me-1"></i> Mark Completed</a>
+                                                if (item.Completed)
+                                                {
+                                                    <a class="dropdown-item" href="@Url.Action("CompleteAppointment", new { id = item.Id })"><i class="bx bx-check-square me-1"></i> Mark Completed</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="dropdown-item"><i class="bx bx-block me-1"></i> Completed</a>
+                                                }
                                             }
                                         </div>
                                     </div>

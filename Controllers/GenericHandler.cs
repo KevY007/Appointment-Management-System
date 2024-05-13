@@ -190,7 +190,7 @@ namespace AMS.Controllers
 
                 deptAdp.Fill(deptTable);
 
-                Department dept = new Department() { Id = Convert.ToInt32(deptTable.Rows[0][0].ToString()), Name = deptTable.Rows[0][1].ToString() };
+                Department dept = new Department() { Id = Convert.ToInt32(deptTable.Rows[0][0].ToString()), Name = deptTable.Rows[0][1].ToString(), AppointmentCost = Convert.ToInt32(deptTable.Rows[0][2].ToString()) };
 
                 ncmd.Dispose();
                 con.Close();
