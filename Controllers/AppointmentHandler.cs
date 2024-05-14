@@ -135,6 +135,17 @@ namespace AMS.Controllers
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "No doctors are currently available in that department.", backTo = "NewAppointment" });
             }
 
+            cmd = new SqlCommand($"EXEC GetNumFreeDoctorsForAppointment @departmentId = {department}, @timeSlot = {TimeSlot}, @date = @dateVal", con);
+            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("dd/MM/yyyy"));
+            int numDoctorsAvail = (int)cmd.ExecuteScalar();
+
+            if (numDoctorsAvail < 1)
+            {
+                cmd.Dispose();
+                con.Close();
+                return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "No doctors are currently available for that time slot and date in that department.", backTo = "NewAppointment" });
+            }
+
             cmd = new SqlCommand($"EXEC CreateAppointment @patientId = {user.Id}, @deptId = {department}, @timeSlot = {TimeSlot}, @date = @dateVal, @desc = '{Description}'", con);
 
             cmd.Parameters.AddWithValue("@dateVal", Date.ToString("dd/MM/yyyy"));

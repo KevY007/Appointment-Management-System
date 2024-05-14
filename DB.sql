@@ -42,7 +42,8 @@ CREATE TABLE Appointments (
 	Date DATETIME NOT NULL,
 	Completed BIT NOT NULL DEFAULT 0,
 	Description varchar(MAX) NOT NULL DEFAULT 'N/A',
-	CONSTRAINT StopClash UNIQUE (TimeSlot, Date)
+	CONSTRAINT PatientClash UNIQUE (TimeSlot, Date, PatientID),
+	CONSTRAINT DoctorClash UNIQUE (TimeSlot, Date, DoctorID),
 );
 
 
@@ -100,6 +101,12 @@ GO
 CREATE PROCEDURE GetAllDoctors AS 
 BEGIN 
 	SELECT * FROM Doctors
+END
+GO
+
+CREATE PROCEDURE GetAvailableDoctors AS 
+BEGIN 
+	SELECT * FROM Doctors WHERE Available = 1
 END
 GO
 
@@ -229,10 +236,22 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE GetFreeDoctorsForAppointment (@departmentId int, @timeSlot int, @date DATETIME) AS 
+BEGIN 
+	SELECT DISTINCT doc FROM GetAvailableDoctors() doc WHERE doc.DepartmentID = @departmentId AND doc.ID NOT IN (SELECT DISTINCT b.DoctorID FROM GetDepartmentAppointments(@departmentId) b WHERE b.Completed = 0 AND b.TimeSlot = @timeSlot AND b.Date = @date)
+END
+GO
+
+CREATE PROCEDURE GetNumFreeDoctorsForAppointment (@departmentId int, @timeSlot int, @date DATETIME) AS 
+BEGIN 
+	SELECT COUNT(DISTINCT doc) FROM GetAvailableDoctors() doc WHERE doc.DepartmentID = @departmentId AND doc.ID NOT IN (SELECT DISTINCT b.DoctorID FROM GetDepartmentAppointments(@departmentId) b WHERE b.Completed = 0 AND b.TimeSlot = @timeSlot AND b.Date = @date)
+END
+GO
+
 CREATE PROCEDURE CreateAppointment (@patientId int, @deptId int, @timeSlot int, @date DATETIME, @desc varchar(MAX)) AS 
 BEGIN
 	INSERT INTO Appointments (PatientID, DoctorID, TimeSlot, Date, Description) 
-	VALUES (@patientId, (SELECT TOP 1 ID FROM Doctors WHERE DepartmentID = @deptId AND Available = 1 ORDER BY NEWID()), @timeSlot, @date, @desc)
+	VALUES (@patientId, (SELECT TOP 1 ID FROM GetFreeDoctorsForAppointment(@deptId, @timeSlot, @date) ORDER BY NEWID()), @timeSlot, @date, @desc)
 END
 GO
 
