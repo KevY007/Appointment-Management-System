@@ -76,14 +76,11 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="@Url.Action("ViewAppointment", new { id = item.Id })"><i class="bx bx-search me-1"></i> View Report</a>
                                             @{
                                                 if (!item.Completed)
                                                 {
                                                     <a class="dropdown-item" href="@Url.Action("CompleteAppointment", new { id = item.Id })"><i class="bx bx-check-square me-1"></i> Mark Completed</a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="dropdown-item"><i class="bx bx-block me-1"></i> Completed</a>
                                                 }
                                             }
                                         </div>
