@@ -22,6 +22,10 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Created</th>
+                            <th>Created By</th>
+                            <th>Modified</th>
+                            <th>Modified By</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -31,6 +35,10 @@
                             <tr>
                                 <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@Html.DisplayFor(modelItem => item.Id)</strong></td>
                                 <td>@item.Name</td>
+                                <td>@item.Created</td>
+                                <td>@item.CreatedBy</td>
+                                <td>@item.Modified</td>
+                                <td>@item.ModifiedBy</td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

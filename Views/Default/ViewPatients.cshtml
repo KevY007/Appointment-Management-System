@@ -26,6 +26,13 @@
                             <th>Email</th>
                             <th>Address</th>
                             <th>Phone</th>
+                            @if (user.Type == UserType.Admin)
+                            {
+                                <th>Created</th>
+                                <th>Created By</th>
+                                <th>Modified</th>
+                                <th>Modified By</th>
+                            }
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -48,7 +55,13 @@
                                 <td>@Html.DisplayFor(modelItem => item.Email)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Address)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Phone)</td>
-
+                                @if (user.Type == UserType.Admin)
+                                {
+                                    <td>@item.Created</td>
+                                    <td>@item.CreatedBy</td>
+                                    <td>@item.Modified</td>
+                                    <td>@item.ModifiedBy</td>
+                                }
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

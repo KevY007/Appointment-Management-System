@@ -82,7 +82,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            var cmd = new SqlCommand($"EXEC CreateDoctor @name = '{name}', @password = '{password}', @deptid = {department}", con);
+            var cmd = new SqlCommand($"EXEC CreateDoctor @name = '{name}', @password = '{password}', @deptid = {department}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
            
@@ -128,6 +128,12 @@ namespace AMS.Controllers
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
                         AppointmentCost = Convert.ToInt32(dt.Rows[i][2].ToString()),
+
+
+                        Created = DateTime.Parse(dt.Rows[i][3].ToString()),
+                        CreatedBy = dt.Rows[i][4].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][5].ToString()),
+                        ModifiedBy = dt.Rows[i][6].ToString(),
                     });
                 }
             }
@@ -153,6 +159,12 @@ namespace AMS.Controllers
                         Department = lDepartments.Find(x => x.Id == Convert.ToInt32(dt.Rows[i][3].ToString())),
                         Available = Convert.ToBoolean(dt.Rows[i][4].ToString()),
                         Salary = Convert.ToInt32(dt.Rows[i][5].ToString()),
+
+
+                        Created = DateTime.Parse(dt.Rows[i][6].ToString()),
+                        CreatedBy = dt.Rows[i][7].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][8].ToString()),
+                        ModifiedBy = dt.Rows[i][9].ToString(),
                     });
                 }
             }
@@ -181,7 +193,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC DeleteDoctor @docId = {id}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC DeleteDoctor @docId = {id}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
 

@@ -50,11 +50,11 @@ namespace AMS.Controllers
             {
                 return RedirectToAction("NewAdmin", new { error = "Incorrect/Incomplete field(s) or length (min 5)!" });
             }
-
+            
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            var cmd = new SqlCommand($"EXEC CreateAdmin @name = '{adm.Name}', @password = '{adm.Password}'", con);
+            var cmd = new SqlCommand($"EXEC CreateAdmin @name = '{adm.Name}', @password = '{adm.Password}', @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
            
@@ -97,7 +97,12 @@ namespace AMS.Controllers
                     {
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
-                        Password = ""
+                        Password = "",
+
+                        Created = DateTime.Parse(dt.Rows[i][3].ToString()),
+                        CreatedBy = dt.Rows[i][4].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][5].ToString()),
+                        ModifiedBy = dt.Rows[i][6].ToString(),
                     });
                 }
             }
@@ -126,7 +131,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC DeleteAdmin @admId = {id}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC DeleteAdmin @admId = {id}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
 

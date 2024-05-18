@@ -115,7 +115,7 @@ namespace AMS.Controllers
 
 
             SqlCommand cmd = new SqlCommand($"EXEC CheckAppointmentClash @patientID = {user.Id}, @timeSlot = {TimeSlot}, @date = @dateVal", con);
-            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("dd/MM/yyyy"));
+            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("yyyy-MM-dd"));
             int duplicate = (int)cmd.ExecuteScalar();
 
             if (duplicate > 0)
@@ -135,8 +135,8 @@ namespace AMS.Controllers
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "No doctors are currently available in that department.", backTo = "NewAppointment" });
             }
 
-            cmd = new SqlCommand($"EXEC GetNumFreeDoctorsForAppointment @departmentId = {department}, @timeSlot = {TimeSlot}, @date = @dateVal", con);
-            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("dd/MM/yyyy"));
+            cmd = new SqlCommand($"SELECT dbo.GetNumFreeDoctorsForAppointment({department}, {TimeSlot}, @dateVal)", con);
+            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("yyyy-MM-dd"));
             int numDoctorsAvail = (int)cmd.ExecuteScalar();
 
             if (numDoctorsAvail < 1)
@@ -146,9 +146,9 @@ namespace AMS.Controllers
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "No doctors are currently available for that time slot and date in that department.", backTo = "NewAppointment" });
             }
 
-            cmd = new SqlCommand($"EXEC CreateAppointment @patientId = {user.Id}, @deptId = {department}, @timeSlot = {TimeSlot}, @date = @dateVal, @desc = '{Description}'", con);
+            cmd = new SqlCommand($"EXEC CreateAppointment @patientId = {user.Id}, @deptId = {department}, @timeSlot = {TimeSlot}, @date = @dateVal, @desc = '{Description}', @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
 
-            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("dd/MM/yyyy"));
+            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("yyyy-MM-dd"));
 
             cmd.ExecuteNonQuery();
             con.Close();
@@ -190,6 +190,12 @@ namespace AMS.Controllers
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
                         AppointmentCost = Convert.ToInt32(dt.Rows[i][2].ToString()),
+
+
+                        Created = DateTime.Parse(dt.Rows[i][3].ToString()),
+                        CreatedBy = dt.Rows[i][4].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][5].ToString()),
+                        ModifiedBy = dt.Rows[i][6].ToString(),
                     });
                 }
             }
@@ -217,6 +223,12 @@ namespace AMS.Controllers
                         Address = dt.Rows[i][5].ToString(),
                         Phone = Convert.ToInt32(dt.Rows[i][6].ToString()),
                         Type = user.Type,
+
+
+                        Created = DateTime.Parse(dt.Rows[i][7].ToString()),
+                        CreatedBy = dt.Rows[i][8].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][9].ToString()),
+                        ModifiedBy = dt.Rows[i][10].ToString(),
                     });
                 }
             }
@@ -243,6 +255,12 @@ namespace AMS.Controllers
                         Available = Convert.ToBoolean(dt.Rows[i][4].ToString()),
                         Salary = Convert.ToInt32(dt.Rows[i][5].ToString()),
                         Type = user.Type,
+
+
+                        Created = DateTime.Parse(dt.Rows[i][6].ToString()),
+                        CreatedBy = dt.Rows[i][7].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][8].ToString()),
+                        ModifiedBy = dt.Rows[i][9].ToString(),
                     });
                 }
             }
@@ -280,6 +298,12 @@ namespace AMS.Controllers
                         Date = DateTime.Parse(dt.Rows[i][4].ToString()),
                         Completed = Convert.ToBoolean(dt.Rows[i][5].ToString()),
                         Description = dt.Rows[i][6].ToString(),
+
+
+                        Created = DateTime.Parse(dt.Rows[i][7].ToString()),
+                        CreatedBy = dt.Rows[i][8].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][9].ToString()),
+                        ModifiedBy = dt.Rows[i][10].ToString(),
                     });
                 }
             }
@@ -330,7 +354,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC MarkAppointmentComplete @id = {id}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC MarkAppointmentComplete @id = {id}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
 

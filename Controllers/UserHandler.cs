@@ -65,6 +65,12 @@ namespace AMS.Controllers
                         Email = dt.Rows[i][4].ToString(),
                         Address = dt.Rows[i][5].ToString(),
                         Phone = Convert.ToInt32(dt.Rows[i][6].ToString()),
+
+
+                        Created = DateTime.Parse(dt.Rows[i][7].ToString()),
+                        CreatedBy = dt.Rows[i][8].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][9].ToString()),
+                        ModifiedBy = dt.Rows[i][10].ToString(),
                     });
                 }
             }
@@ -91,7 +97,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC DeletePatient @id = {id}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC DeletePatient @id = {id}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
 
@@ -116,7 +122,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            string query = $"EXEC ToggleDoctorAvailability @doctorId = {doc.Id}";
+            string query = $"EXEC ToggleDoctorAvailability @doctorId = {doc.Id}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'";
             
             SqlCommand cmd = new SqlCommand(query, con);
             cmd.ExecuteNonQuery();

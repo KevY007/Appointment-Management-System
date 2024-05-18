@@ -26,6 +26,13 @@
                             <th>Department</th>
                             <th>On Break</th>
                             <th>Salary</th>
+                            @if (user.Type == UserType.Admin)
+                            {
+                                <th>Created</th>
+                                <th>Created By</th>
+                                <th>Modified</th>
+                                <th>Modified By</th>
+                            }
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -47,6 +54,13 @@
                                     }
                                 }
                                 <td>@item.Salary</td>
+                                @if (user.Type == UserType.Admin)
+                                {
+                                    <td>@item.Created</td>
+                                    <td>@item.CreatedBy</td>
+                                    <td>@item.Modified</td>
+                                    <td>@item.ModifiedBy</td>
+                                }
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

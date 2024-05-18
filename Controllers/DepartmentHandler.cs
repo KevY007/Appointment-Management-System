@@ -56,7 +56,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            var cmd = new SqlCommand($"EXEC CreateDepartment @name = '{dep.Name}', @appointmentCost = {dep.AppointmentCost}", con);
+            var cmd = new SqlCommand($"EXEC CreateDepartment @name = '{dep.Name}', @appointmentCost = {dep.AppointmentCost}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
            
@@ -102,6 +102,12 @@ namespace AMS.Controllers
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
                         AppointmentCost = Convert.ToInt32(dt.Rows[i][2].ToString()),
+
+
+                        Created = DateTime.Parse(dt.Rows[i][3].ToString()),
+                        CreatedBy = dt.Rows[i][4].ToString(),
+                        Modified = DateTime.Parse(dt.Rows[i][5].ToString()),
+                        ModifiedBy = dt.Rows[i][6].ToString(),
                     });
                 }
             }
@@ -130,7 +136,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC DeleteDepartment @deptId = {id}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC DeleteDepartment @deptId = {id}, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
             cmd.ExecuteNonQuery();
             con.Close();
 

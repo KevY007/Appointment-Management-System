@@ -117,7 +117,6 @@
     <Content Include="Views\Default\Login.cshtml" />
     <Content Include="Views\Default\ViewPatients.cshtml" />
     <Content Include="Views\Default\ErrorPage.cshtml" />
-    <Content Include="Views\Default\EditPatient.cshtml" />
     <Content Include="Views\Default\NewAppointment.cshtml" />
     <Content Include="Views\Default\ViewAppointments.cshtml" />
     <Content Include="Views\Default\ViewDepartments.cshtml" />

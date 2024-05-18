@@ -131,7 +131,7 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC CreatePatient @name = '{patient.Name}', @password = '{patient.Password}', @gender = {(byte)patient.Gender}, @email = '{patient.Email}', @address = '{patient.Address}', @phone = {patient.Phone}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC CreatePatient @name = '{patient.Name}', @password = '{patient.Password}', @gender = {(byte)patient.Gender}, @email = '{patient.Email}', @address = '{patient.Address}', @phone = {patient.Phone}, @queryBy = 'SYSTEM'", con);
 
             cmd.ExecuteNonQuery();
             con.Close();
