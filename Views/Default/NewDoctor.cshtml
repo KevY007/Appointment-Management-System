@@ -1,0 +1,71 @@
+﻿@model AMS.Doctor
+
+@{
+    ViewBag.Title = "NewDoctor";
+    Layout = "~/Views/DefaultLayout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Doctors / </span> Add Doctor</h4>
+
+    <!-- Basic Layout -->
+    <div class="row">
+        <div class="col-xl">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Add a new doctor</h5>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm())
+                    {
+                        HtmlHelper.ClientValidationEnabled = true;
+                        HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
+
+                        @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <div class="form-group mb-2">
+                            @Html.LabelFor(model => model.Name, labelText: "Doctor Name", htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mike" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+
+                        <br />
+                        <div class="form-group mb-2 form-password-toggle">
+                            @Html.LabelFor(model => model.Password, labelText: "Doctor Password", htmlAttributes: new { @class = "form-label" })
+                            <div class="input-group input-group-merge">
+                                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "***************", @aria_describedby = "password" })
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="form-group mb-2">
+                            @{
+                                var b = new List<SelectListItem>();
+                                foreach (Department c in ViewBag.Departments)
+                                {
+                                    b.Add(new SelectListItem { Text = $"{c.Name}", Value = c.Id.ToString() });
+                                }
+                            }
+
+                            @Html.Label("Department", labelText: "Department", htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownList("Department", b, new { @class = "select2 form-select" })
+                        </div>
+                        <br />
+
+                        <p class="text-center text-danger">@ViewBag.Error</p>
+                        @Html.ValidationSummary(true, "", new { @class = "text-center text-danger" })
+
+                        <div class="form-group mb-2">
+                            <input type="submit" value="Add" class="btn btn-primary d-grid w-100" />
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

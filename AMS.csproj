@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DoctorHandler.cs" />
     <Compile Include="Controllers\DepartmentHandler.cs" />
     <Compile Include="Controllers\AppointmentHandler.cs" />
     <Compile Include="Controllers\UserHandler.cs" />
@@ -120,6 +121,8 @@
     <Content Include="Views\Default\ViewAppointments.cshtml" />
     <Content Include="Views\Default\ViewDepartments.cshtml" />
     <Content Include="Views\Default\NewDepartment.cshtml" />
+    <Content Include="Views\Default\NewDoctor.cshtml" />
+    <Content Include="Views\Default\ViewDoctors.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

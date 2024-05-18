@@ -267,6 +267,18 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE CreateDoctor (@name varchar(MAX), @password varchar(MAX), @deptId int) AS 
+BEGIN
+	INSERT INTO Doctors (Name, Password, DepartmentID) VALUES (@name, @password, @deptId)
+END
+GO
+
+
+CREATE PROCEDURE DeleteDoctor (@docId int) AS 
+BEGIN
+	DELETE FROM Doctors WHERE ID = @docId
+END
+GO
 
 CREATE PROCEDURE DeleteDepartment (@deptId int) AS 
 BEGIN
