@@ -60,6 +60,10 @@ namespace AMS.Controllers
                 ViewBag.NumDepartments = (int)cmd.ExecuteScalar();
                 cmd.Dispose();
 
+                cmd = new SqlCommand($"EXEC GetNumAdmins", con);
+                ViewBag.NumAdmins = (int)cmd.ExecuteScalar();
+                cmd.Dispose();
+
                 cmd = new SqlCommand($"EXEC GetNumPendingAppointments", con);
                 ViewBag.NumAppointmentsActive = (int)cmd.ExecuteScalar();
                 cmd.Dispose();

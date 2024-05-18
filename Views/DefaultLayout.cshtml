@@ -139,35 +139,96 @@
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Administrative</span></li>
 
                             <!-- Departments -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Department") ? "active" : "")">
-                                <a href="@Url.Action("ViewDepartments")" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bx-user"></i>
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Department") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                                     <div data-i18n="Departments">Departments</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewDepartments") ? "active" : "")">
+                                        <a href="@Url.Action("ViewDepartments")" class="menu-link">
+                                            <div data-i18n="ViewDep">View</div>
+                                        </a>
+                                    </li>
+
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("NewDepartment") ? "active" : "")">
+                                        <a href="@Url.Action("NewDepartment")" class="menu-link">
+                                            <div data-i18n="NewDep">Add</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <!-- Patients -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Patient") ? "active" : "")">
-                                <a href="@Url.Action("ViewPatients")" class="menu-link">
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Patient") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
                                     <i class="menu-icon tf-icons bx bx-user"></i>
                                     <div data-i18n="Patients">Patients</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewPatients") ? "active" : "")">
+                                        <a href="@Url.Action("ViewPatients")" class="menu-link">
+                                            <div data-i18n="ViewPat">View</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <!-- Doctors -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Doctor") ? "active" : "")">
-                                <a href="@Url.Action("ViewDoctors")" class="menu-link">
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Doctor") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
                                     <i class="menu-icon tf-icons bx bx-book"></i>
                                     <div data-i18n="Doctors">Doctors</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewDoctors") ? "active" : "")">
+                                        <a href="@Url.Action("ViewDoctors")" class="menu-link">
+                                            <div data-i18n="ViewDoc">View</div>
+                                        </a>
+                                    </li>
+
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("NewDoctor") ? "active" : "")">
+                                        <a href="@Url.Action("NewDoctor")" class="menu-link">
+                                            <div data-i18n="NewDoc">Add</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <!-- Appointments -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") ? "active" : "")">
-                                <a href="@Url.Action("ViewAppointments")" class="menu-link">
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
                                     <i class="menu-icon tf-icons bx bx-calendar-week"></i>
                                     <div data-i18n="Appointments">Appointments</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewAppointments") ? "active" : "")">
+                                        <a href="@Url.Action("ViewAppointments")" class="menu-link">
+                                            <div data-i18n="ViewApp">View</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <!-- Admins -->
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Admin") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                                    <div data-i18n="Admins">Admins</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewAdmins") ? "active" : "")">
+                                        <a href="@Url.Action("ViewAdmins")" class="menu-link">
+                                            <div data-i18n="ViewAdm">View</div>
+                                        </a>
+                                    </li>
+
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("NewAdmin") ? "active" : "")">
+                                        <a href="@Url.Action("NewAdmin")" class="menu-link">
+                                            <div data-i18n="NewAdm">Add</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else if (user.Type == UserType.Doctor)
@@ -176,19 +237,33 @@
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Doctor</span></li>
 
                             <!-- Patients -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Patient") ? "active" : "")">
-                                <a href="@Url.Action("ViewPatients")" class="menu-link">
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Patient") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
                                     <i class="menu-icon tf-icons bx bx-user"></i>
                                     <div data-i18n="Patients">Patients</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewPatients") ? "active" : "")">
+                                        <a href="@Url.Action("ViewPatients")" class="menu-link">
+                                            <div data-i18n="ViewPat">View</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <!-- Appointments -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") ? "active" : "")">
-                                <a href="@Url.Action("ViewAppointments")" class="menu-link">
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
                                     <i class="menu-icon tf-icons bx bx-calendar-week"></i>
                                     <div data-i18n="Appointments">Appointments</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewAppointments") ? "active" : "")">
+                                        <a href="@Url.Action("ViewAppointments")" class="menu-link">
+                                            <div data-i18n="ViewApp">View</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else if (user.Type == UserType.Patient)
@@ -196,21 +271,25 @@
                             <!-- Patient -->
                             <li class="menu-header small text-uppercase"><span class="menu-header-text">Patient</span></li>
 
-                            <!-- Schedule -->
-                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("NewAppointment") ? "active" : "")">
-                                <a href="@Url.Action("NewAppointment")" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bx-user"></i>
-                                    <div data-i18n="NewAppointment">Schedule Appointment</div>
-                                </a>
-                            </li>
-
                             <!-- Appointments -->
-                            <li class="menu-item @((ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") &&
-!ViewContext.RouteData.Values["Action"].ToString().Contains("NewAppointment")) ? "active" : "")">
-                                <a href="@Url.Action("ViewAppointments")" class="menu-link">
+                            <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("Appointment") ? "active open" : "")">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
                                     <i class="menu-icon tf-icons bx bx-calendar-week"></i>
                                     <div data-i18n="Appointments">Appointments</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("NewAppointment") ? "active" : "")">
+                                        <a href="@Url.Action("NewAppointment")" class="menu-link">
+                                            <div data-i18n="NewApp">Schedule</div>
+                                        </a>
+                                    </li>
+
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("ViewAppointments") ? "active" : "")">
+                                        <a href="@Url.Action("ViewAppointments")" class="menu-link">
+                                            <div data-i18n="ViewApp">View</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                     }
