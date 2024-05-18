@@ -176,7 +176,7 @@ namespace AMS.Controllers
                 {
                     Id = Convert.ToInt32(dt.Rows[0][0].ToString()),
                     Name = dt.Rows[0][1].ToString(),
-                    Password = dt.Rows[0][2].ToString(),
+                    Password = "",
                     Gender = (Gender)Enum.ToObject(typeof(Gender), Convert.ToByte(dt.Rows[0][3].ToString())),
                     Email = dt.Rows[0][4].ToString(),
                     Address = dt.Rows[0][5].ToString(),
@@ -203,7 +203,7 @@ namespace AMS.Controllers
                 {
                     Id = Convert.ToInt32(dt.Rows[0][0].ToString()),
                     Name = dt.Rows[0][1].ToString(),
-                    Password = dt.Rows[0][2].ToString(),
+                    Password = "",
                     Department = dept,
                     Available = Convert.ToBoolean(dt.Rows[0][4].ToString()),
                     Salary = Convert.ToInt32(dt.Rows[0][5].ToString()),
@@ -215,7 +215,7 @@ namespace AMS.Controllers
                 {
                     Id = Convert.ToInt32(dt.Rows[0][0].ToString()),
                     Name = dt.Rows[0][1].ToString(),
-                    Password = dt.Rows[0][2].ToString(),
+                    Password = "",
                 };
             }
 

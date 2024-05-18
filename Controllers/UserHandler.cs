@@ -60,7 +60,7 @@ namespace AMS.Controllers
                     {
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
-                        Password = dt.Rows[i][2].ToString(),
+                        Password = "",
                         Gender = (Gender)Enum.ToObject(typeof(Gender), Convert.ToByte(dt.Rows[i][3].ToString())),
                         Email = dt.Rows[i][4].ToString(),
                         Address = dt.Rows[i][5].ToString(),
