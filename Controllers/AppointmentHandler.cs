@@ -154,7 +154,7 @@ namespace AMS.Controllers
             con.Close();
            
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ViewAppointments");
         }
         #endregion
 

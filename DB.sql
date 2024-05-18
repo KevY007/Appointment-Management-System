@@ -261,6 +261,19 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE CreateDepartment (@name varchar(MAX), @appointmentCost int) AS 
+BEGIN
+	INSERT INTO Departments (Name, AppointmentCost) VALUES (@name, @appointmentCost)
+END
+GO
+
+
+CREATE PROCEDURE DeleteDepartment (@deptId int) AS 
+BEGIN
+	DELETE FROM Departments WHERE ID = @deptId
+END
+GO
+
 CREATE PROCEDURE ToggleDoctorAvailability (@doctorId int) AS
 BEGIN
     IF (SELECT Available FROM Doctors WHERE ID = @doctorId) = 1
