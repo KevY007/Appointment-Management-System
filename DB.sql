@@ -208,6 +208,12 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE GetAllAdmins AS 
+BEGIN 
+	SELECT * FROM Admins
+END
+GO
+
 CREATE PROCEDURE GetAllAppointments AS 
 BEGIN 
 	SELECT * FROM Appointments ORDER BY Completed ASC, Date DESC, TimeSlot ASC
@@ -273,10 +279,21 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE DeleteDoctor (@docId int) AS 
 BEGIN
 	DELETE FROM Doctors WHERE ID = @docId
+END
+GO
+
+CREATE PROCEDURE CreateAdmin (@name varchar(MAX), @password varchar(MAX)) AS 
+BEGIN
+	INSERT INTO Admins (Name, Password) VALUES (@name, @password)
+END
+GO
+
+CREATE PROCEDURE DeleteAdmin (@admId int) AS 
+BEGIN
+	DELETE FROM Admins WHERE ID = @admId
 END
 GO
 

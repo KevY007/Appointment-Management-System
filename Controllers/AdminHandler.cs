@@ -14,10 +14,10 @@ namespace AMS.Controllers
 {
     public partial class DefaultController : Controller
     {
-        #region Departments
-        #region Create New Department
+        #region Admins
+        #region Create New Admin
         [HttpGet, Authorize]
-        public ActionResult NewDepartment(string error = "")
+        public ActionResult NewAdmin(string error = "")
         {
             if (Session["User"] == null)
             {
@@ -34,7 +34,7 @@ namespace AMS.Controllers
         }
 
         [HttpPost, Authorize]
-        public ActionResult NewDepartment(Department dep)
+        public ActionResult NewAdmin(Admin adm)
         {
             if (Session["User"] == null)
             {
@@ -48,26 +48,24 @@ namespace AMS.Controllers
 
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("NewDepartment", new { error = "Incorrect/Incomplete field(s) or length (min 5)!" });
+                return RedirectToAction("NewAdmin", new { error = "Incorrect/Incomplete field(s) or length (min 5)!" });
             }
-
-            Admin user = (Admin)Session["User"];
 
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            var cmd = new SqlCommand($"EXEC CreateDepartment @name = '{dep.Name}', @appointmentCost = {dep.AppointmentCost}", con);
+            var cmd = new SqlCommand($"EXEC CreateAdmin @name = '{adm.Name}', @password = '{adm.Password}'", con);
             cmd.ExecuteNonQuery();
             con.Close();
            
 
-            return RedirectToAction("ViewDepartments");
+            return RedirectToAction("ViewAdmins");
         }
         #endregion
 
-        #region View Departments
+        #region View Admins
         [Authorize]
-        public ActionResult ViewDepartments()
+        public ActionResult ViewAdmins()
         {
             if (Session["User"] == null)
             {
@@ -79,43 +77,41 @@ namespace AMS.Controllers
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "You are not allowed to view this page.", backTo = "Index" });
             }
 
-            User user = (User)Session["User"];
-
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC GetAllDepartments", con);
+            SqlCommand cmd = new SqlCommand($"EXEC GetAllAdmins", con);
 
             DataTable dt = new DataTable();
             SqlDataAdapter sd = new SqlDataAdapter(cmd);
 
             sd.Fill(dt);
 
-            List<Department> lDepartments = new List<Department>();
+            List<Admin> lAdmin = new List<Admin>();
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 if (dt.Rows.Count > 0)
                 {
-                    lDepartments.Add(new Department()
+                    lAdmin.Add(new Admin()
                     {
                         Id = Convert.ToInt32(dt.Rows[i][0].ToString()),
                         Name = dt.Rows[i][1].ToString(),
-                        AppointmentCost = Convert.ToInt32(dt.Rows[i][2].ToString()),
+                        Password = ""
                     });
                 }
             }
 
             con.Close();
 
-            ViewBag.Departments = lDepartments;
+            ViewBag.Admins = lAdmin;
             return View();
         }
         #endregion
 
-        #region Delete Department
+        #region Delete Admin
         [Authorize]
-        public ActionResult DeleteDepartment(int id)
+        public ActionResult DeleteAdmin(int id)
         {
             if (Session["User"] == null)
             {
@@ -130,11 +126,11 @@ namespace AMS.Controllers
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = new SqlCommand($"EXEC DeleteDepartment @deptId = {id}", con);
+            SqlCommand cmd = new SqlCommand($"EXEC DeleteAdmin @admId = {id}", con);
             cmd.ExecuteNonQuery();
             con.Close();
 
-            return RedirectToAction("ViewDepartments");
+            return (id == ((User)Session["User"]).Id) ? RedirectToAction("Logout") : RedirectToAction("ViewAdmins");
         }
         #endregion
 

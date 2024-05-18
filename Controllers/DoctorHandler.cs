@@ -76,7 +76,7 @@ namespace AMS.Controllers
 
             if (name == null || password == null || department == null || name.Length < 3 || password.Length < 3 || department.Length < 1)
             {
-                return RedirectToAction("NewDoctor", new { error = $"Incorrect field(s) or length!" });
+                return RedirectToAction("NewDoctor", new { error = $"Incorrect/Incomplete field(s) or length (min 5)!" });
             }
 
             SqlConnection con = new SqlConnection(Settings.ConnectionString);

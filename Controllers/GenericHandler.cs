@@ -125,7 +125,7 @@ namespace AMS.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Register", new { error = "Incorrect field(s) or length!" });
+                return RedirectToAction("Register", new { error = "Incorrect/Incomplete field(s) or length (min 5)!" });
             }
 
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
