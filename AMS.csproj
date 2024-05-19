@@ -160,6 +160,7 @@
     <Content Include="Views\Default\ViewDoctors.cshtml" />
     <Content Include="Views\Default\NewAdmin.cshtml" />
     <Content Include="Views\Default\ViewAdmins.cshtml" />
+    <Content Include="Views\Default\MonthlyDepartmentsReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -151,6 +151,12 @@
                                         </a>
                                     </li>
 
+                                    <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("MonthlyDepartmentsReport") ? "active" : "")">
+                                        <a href="@Url.Action("MonthlyDepartmentsReport")" class="menu-link">
+                                            <div data-i18n="MonthlyDepReport">Monthly Reports</div>
+                                        </a>
+                                    </li>
+
                                     <li class="menu-item @(ViewContext.RouteData.Values["Action"].ToString().Contains("NewDepartment") ? "active" : "")">
                                         <a href="@Url.Action("NewDepartment")" class="menu-link">
                                             <div data-i18n="NewDep">Add</div>

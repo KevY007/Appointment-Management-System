@@ -357,7 +357,49 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE GenerateDepartmentsMonthlyReport AS
+BEGIN
+    DECLARE @DepartmentID INT, @DepartmentName VARCHAR(100), @AppointmentCost INT, @TotalAppointments INT, @CompletedAppointments INT, @PendingAppointments INT, @TotalIncome INT, @LastAppointmentOn DATE;
+    DECLARE @StartDate DATE = DATEADD(month, DATEDIFF(month, 0, GETDATE()), 0);
+    DECLARE @EndDate DATE = EOMONTH(GETDATE());
 
+
+    CREATE TABLE #tmpMonthlyReport (
+        DepartmentID INT, DepartmentName varchar(100), TotalAppointments INT, 
+		CompletedAppointments INT, PendingAppointments INT, TotalIncome INT, LastAppointmentOn DATE
+    );
+
+    DECLARE department_cursor CURSOR FOR SELECT ID, Name, AppointmentCost FROM Departments WHERE IsActive = 1;
+
+    OPEN department_cursor
+    FETCH NEXT FROM department_cursor INTO @DepartmentID, @DepartmentName, @AppointmentCost;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+
+        SELECT 
+            @TotalAppointments = COUNT(a.ID), 
+            @CompletedAppointments = COUNT(CASE WHEN a.Completed = 1 THEN 1 END),
+            @PendingAppointments = COUNT(CASE WHEN a.Completed = 0 THEN 1 END),
+            @TotalIncome = SUM(CASE WHEN a.Completed = 1 THEN @AppointmentCost ELSE 0 END),
+            @LastAppointmentOn = MAX(a.Date)
+        FROM Appointments a JOIN Doctors d ON a.DoctorID = d.ID 
+        WHERE d.DepartmentID = @DepartmentID AND a.Date BETWEEN @StartDate AND @EndDate AND a.IsActive = 1;
+
+        INSERT INTO #tmpMonthlyReport (DepartmentID, DepartmentName, TotalAppointments, CompletedAppointments, PendingAppointments, TotalIncome, LastAppointmentOn)
+        VALUES (@DepartmentID, @DepartmentName, @TotalAppointments, @CompletedAppointments, @PendingAppointments, @TotalIncome, @LastAppointmentOn);
+
+        FETCH NEXT FROM department_cursor INTO @DepartmentID, @DepartmentName, @AppointmentCost;
+    END;
+
+    CLOSE department_cursor;
+    DEALLOCATE department_cursor;
+
+    SELECT * FROM #tmpMonthlyReport;
+
+    DROP TABLE #tmpMonthlyReport;
+END
+GO
 
 CREATE TRIGGER DoctorDeletion ON Doctors AFTER UPDATE AS
 BEGIN
