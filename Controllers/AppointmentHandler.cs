@@ -109,6 +109,11 @@ namespace AMS.Controllers
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "You cannot create an appointment without the patients consent.", backTo = "Index" });
             }
 
+            if (Date < DateTime.Now)
+            {
+                return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "You cannot create an appointment in the past.", backTo = "Index" });
+            }
+
             Patient user = (Patient)Session["User"];
 
             SqlConnection con = new SqlConnection(Settings.ConnectionString);
@@ -554,7 +559,12 @@ namespace AMS.Controllers
             report.SetParameters(parameters);
             report.DisplayName = fileName;
 
-            byte[] pdfBytes = report.Render("PDF");
+            byte[] pdfBytes = null;
+            try
+            {
+                pdfBytes = report.Render("PDF");
+            }
+            catch { }
 
             Response.ContentType = "application/pdf";
             Response.AddHeader("Content-Disposition", $"inline; filename={fileName}");

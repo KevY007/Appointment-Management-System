@@ -13,7 +13,7 @@ namespace AMS
 {
     public static class Settings
     {
-        public static string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AMS;Integrated Security=True";
+        public static string ConnectionString = "Data Source=RAOUMER-PC\\MSSQLSERVER01;Initial Catalog=db_dbms_project;Integrated Security=True";
     }
 }
 
