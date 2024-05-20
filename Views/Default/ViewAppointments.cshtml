@@ -78,7 +78,7 @@
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="@Url.Action("ViewAppointment", new { id = item.Id })"><i class="bx bx-search me-1"></i> View Report</a>
                                             @{
-                                                if (!item.Completed)
+                                                if (!item.Completed && user.Type != UserType.Patient)
                                                 {
                                                     <a class="dropdown-item" href="@Url.Action("CompleteAppointment", new { id = item.Id })"><i class="bx bx-check-square me-1"></i> Mark Completed</a>
                                                 }

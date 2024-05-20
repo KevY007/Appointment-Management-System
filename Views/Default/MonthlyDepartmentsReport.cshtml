@@ -36,8 +36,26 @@
                                 <td>@item[2].ToString()</td>
                                 <td>@item[3].ToString()</td>
                                 <td>@item[4].ToString()</td>
-                                <td>@item[5].ToString()</td>
-                                <td>@DateTime.Parse(item[6].ToString()).ToString("dd/MM/yyyy")</td>
+                                @{
+                                    if(item[5] != null && item[5].ToString().Length > 1)
+                                    {
+                                        <td>@item[5].ToString()</td>
+                                    }
+                                    else 
+                                    {
+                                        <td>N/A</td>
+                                    }
+                                 }
+                                @{
+                                    if(item[6] != null && item[6].ToString().Length > 3)
+                                    {
+                                        <td>@DateTime.Parse(item[6].ToString()).ToString("dd/MM/yyyy")</td>
+                                    }
+                                    else 
+                                    {
+                                        <td>N/A</td>
+                                    }
+                                 }
                             </tr>
                         }
                     </tbody>
