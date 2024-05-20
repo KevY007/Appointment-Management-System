@@ -56,6 +56,12 @@ CREATE TABLE Admins (
 CREATE TABLE TimeSlots (
 	ID int NOT NULL PRIMARY KEY IDENTITY(1, 1),
 	Timing varchar(50) NOT NULL UNIQUE,
+
+	Created DATETIME NOT NULL DEFAULT GETDATE(),
+	CreatedBy varchar(128) NOT NULL DEFAULT 'N/A',
+	Modified DATETIME NOT NULL DEFAULT GETDATE(),
+	ModifiedBy varchar(128) NOT NULL DEFAULT 'N/A',
+	IsActive BIT NOT NULL DEFAULT 1,
 );
 
 CREATE TABLE Appointments (
@@ -77,6 +83,26 @@ CREATE TABLE Appointments (
 	CONSTRAINT PatientClash UNIQUE (TimeSlot, Date, PatientID, Completed, IsActive),
 	CONSTRAINT DoctorClash UNIQUE (TimeSlot, Date, DoctorID, Completed, IsActive),
 );
+
+CREATE INDEX DepartmentActive ON Departments(IsActive);
+
+CREATE INDEX PatientEmail ON Patients(Email);
+CREATE INDEX PatientActive ON Patients(IsActive);
+
+CREATE INDEX DoctorDepartment ON Doctors(DepartmentID);
+CREATE INDEX DoctorAvailable ON Doctors(Available);
+CREATE INDEX DoctorActive ON Doctors(IsActive);
+
+CREATE INDEX AdminActive ON Admins(IsActive);
+
+CREATE UNIQUE INDEX TimeSlotTiming ON TimeSlots(Timing);
+
+CREATE INDEX AppointmentPatient ON Appointments(PatientID);
+CREATE INDEX AppointmentDoctor ON Appointments(DoctorID);
+CREATE INDEX AppointmentTimeSlot ON Appointments(TimeSlot);
+CREATE INDEX AppointmentDate ON Appointments(Date);
+CREATE INDEX AppointmentCompleted ON Appointments(Completed);
+CREATE INDEX AppointmentActive ON Appointments(IsActive);
 
 
 INSERT INTO TimeSlots (Timing) VALUES ('11:30 AM to 12:30 PM');
