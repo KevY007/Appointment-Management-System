@@ -13,7 +13,7 @@ namespace AMS
 {
     public static class Settings
     {
-        public static string ConnectionString = "Data Source=RAOUMER-PC\\MSSQLSERVER01;Initial Catalog=db_dbms_project;Integrated Security=True";
+        public static string ConnectionString = "workstation id=appointmentsys.mssql.somee.com;packet size=4096;user id=dotrehab_SQLLogin_1;pwd=2g7ebvzd88;data source=appointmentsys.mssql.somee.com;persist security info=False;initial catalog=appointmentsys;TrustServerCertificate=True";
     }
 }
 
