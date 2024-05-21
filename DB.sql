@@ -456,7 +456,8 @@ BEGIN
 	-- Temporary report table with custom structure. Deleted after the procedure is ran.
     CREATE TABLE #tmpMonthlyReport (
         DepartmentID INT, DepartmentName varchar(100), TotalAppointments INT, 
-		CompletedAppointments INT, PendingAppointments INT, TotalIncome INT, LastAppointmentOn DATE
+		CompletedAppointments INT, PendingAppointments INT, TotalIncome INT, LastAppointmentOn DATE,
+		INDEX DeptID NONCLUSTERED (DepartmentID)
     );
 
 	-- Create a cursor pertaining to ID, Name and AppointmentCost from Departments which are Active.

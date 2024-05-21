@@ -96,7 +96,7 @@ namespace AMS.Controllers
         }
 
         [HttpPost, Authorize]
-        public ActionResult NewAppointment(int department, string TimeSlot, DateTime Date, string Description)
+        public ActionResult NewAppointment(int department, string TimeSlot, string Date, string Description)
         {
             if (Session["User"] == null)
             {
@@ -109,7 +109,7 @@ namespace AMS.Controllers
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "You cannot create an appointment without the patients consent.", backTo = "Index" });
             }
 
-            if (Date < DateTime.Now)
+            if (DateTime.ParseExact(Date, "dd/MM/yyyy", null) < DateTime.Now)
             {
                 return RedirectToAction("ErrorPage", new { title = "Unable to proceed!", message = "You cannot create an appointment in the past.", backTo = "Index" });
             }
@@ -121,7 +121,7 @@ namespace AMS.Controllers
 
 
             SqlCommand cmd = new SqlCommand($"EXEC CheckAppointmentClash @patientID = {user.Id}, @timeSlot = {TimeSlot}, @date = @dateVal", con);
-            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@dateVal", DateTime.ParseExact(Date, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"));
             int duplicate = (int)cmd.ExecuteScalar();
 
             if (duplicate > 0)
@@ -142,7 +142,7 @@ namespace AMS.Controllers
             }
 
             cmd = new SqlCommand($"SELECT dbo.GetNumFreeDoctorsForAppointment({department}, {TimeSlot}, @dateVal)", con);
-            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@dateVal", DateTime.ParseExact(Date, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"));
             int numDoctorsAvail = (int)cmd.ExecuteScalar();
 
             if (numDoctorsAvail < 1)
@@ -154,7 +154,7 @@ namespace AMS.Controllers
 
             cmd = new SqlCommand($"EXEC CreateAppointment @patientId = {user.Id}, @deptId = {department}, @timeSlot = {TimeSlot}, @date = @dateVal, @desc = @descVal, @queryBy = '{((User)Session["User"]).Type.ToString()} {((User)Session["User"]).Name} ({((User)Session["User"]).Id})'", con);
 
-            cmd.Parameters.AddWithValue("@dateVal", Date.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@dateVal", DateTime.ParseExact(Date, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@descVal", Description);
 
             cmd.ExecuteNonQuery();
